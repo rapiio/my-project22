@@ -1,0 +1,105 @@
+!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>خدمات زوار بيت الله</title>
+    <script type="module" src="https://js.arcgis.com/embeddable-components/4.32/arcgis-embeddable-components.esm.js"></script>
+    <link rel="stylesheet" href="css.css">
+    <style>
+        #embedded-map {
+            height: 700px;
+            margin: 20px auto;
+            width: 95%;
+        }
+        .sidebar {
+            display: block;
+        }
+        .menu-icon {
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<center>  
+     <img src="https://media1.tenor.com/m/2N5GDoyNGOoAAAAd/dancing-emoji.gif" alt="Dancing Emoji" width="300" height="300">
+</center>
+
+
+<body>
+    <header>
+        <div class="menu-icon" onclick="toggleMenu()">&#9776;</div>
+        <h1 id="page-title">خدمات زوار بيت الله</h1>
+    </header>
+
+    <div id="sidebar" class="sidebar">
+        <ul>
+            <li onclick="toggleLanguage('ar')">اللغة العربية</li>
+            <li onclick="toggleLanguage('en')">English</li>
+        </ul>
+    </div>
+
+    <section id="map-container" class="map-section">
+        <h2 id="services-titl"></h2>
+        <arcgis-embedded-map
+            id="embedded-map"
+            item-id="53cafbefac36420abc89d12225f6bdeb"
+            theme="dark"
+            bookmarks-enabled
+            heading-enabled
+            legend-enabled
+            information-enabled
+            portal-url="https://www.arcgis.com">
+        </arcgis-embedded-map>
+       
+    </section>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
+    <script>
+        var satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+            attribution: 'Tiles &copy; Esri &mdash; Source: Esri'
+        });
+
+        // Placeholder GeoJSON
+        var monaJson = {}; // Define your GeoJSON data here
+        L.geoJSON(monaJson).addTo(map);
+
+        function toggleLanguage(lang) {
+            const translations = {
+                ar: {
+                    title: "خدمة زوار بيت الله",
+                    servicesTitle: "الخدمات",
+                    sidebar: ["اللغة العربية", "English"]
+                },
+                en: {
+                    title: "Pilgrims Visitor Service",
+                    servicesTitle: "Services",
+                    sidebar: ["Arabic", "English"]
+                }
+            };
+
+            if (translations[lang]) {
+                document.title = translations[lang].title;
+                document.getElementById("page-title").textContent = translations[lang].title;
+                document.getElementById("services-title").textContent = translations[lang].servicesTitle;
+
+                const sidebarItems = document.querySelectorAll("#sidebar li");
+                const sidebarTranslations = translations[lang].sidebar;
+                sidebarItems.forEach((item, index) => {
+                    item.textContent = sidebarTranslations[index];
+                });
+
+                document.documentElement.lang = lang;
+                document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+            } else {
+                console.error("لغة غير مدعومة: " + lang);
+            }
+        }
+
+        function toggleMenu() {
+            var sidebar = document.getElementById("sidebar");
+            sidebar.style.display = sidebar.style.display === "none" ? "block" : "none";
+        }
+    </script>
+</body>
+</html>
